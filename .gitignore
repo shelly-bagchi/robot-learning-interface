@@ -42,3 +42,4 @@ sysinfo.txt
 # Other
 *.7z
 RobotInterface/Temp/*
+RobotInterface/Library/Artifacts/*
