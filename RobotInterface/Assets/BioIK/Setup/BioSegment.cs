@@ -61,7 +61,7 @@ namespace BioIK {
 		public BioObjective AddObjective(ObjectiveType type) {
 			BioObjective objective = Utility.AddObjective(this, type);
 			if(objective == null) {
-				print("The objective could not be found.");
+				Debug.Log("The objective could not be found.");
 				return null;
 			} else {
 				System.Array.Resize(ref Objectives, Objectives.Length+1);
