@@ -17,6 +17,11 @@ public class Full_Buttons : MonoBehaviour
     public List<GameObject> DuplicateTargets;
     public UnityEngine.UI.Toggle ShowAllPointsToggle;
 
+    List<string> m_DropOptions = new List<string>();
+
+    GameObject joint;
+    List<string> jointAngles = new List<string>();
+
     void Start()
     {
         ShowAllPointsToggle = GameObject.Find("ShowAllPointsToggle").GetComponent<UnityEngine.UI.Toggle>();
@@ -25,6 +30,7 @@ public class Full_Buttons : MonoBehaviour
         positions = target.GetComponent<Mouse_drag>().positions;
         point_selected = false;
         DuplicateTargets = new List<GameObject>();
+        joint = GameObject.Find("JointAngleFB");
     }
     ///<summary>
     ///Refreshes the numbering on the dropdown menu
@@ -109,11 +115,20 @@ public class Full_Buttons : MonoBehaviour
     public void Add_Point()
     {
         Vector3 newVector = target.transform.position; //set a new vector holding the current target position
-        positions.Add(newVector); //using list function to add this new vector 
-        dropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData(positions.Count.ToString() + ": " + Vector3_to_String(newVector))); //add the option to the dropdown menu
-        dropdown.value = positions.Count - 1;//set the dropdown value to change the dropdown shown value
+        print(newVector);
+        m_DropOptions.Add((dropdown.options.Count + 1).ToString() + ": " + Vector3_to_String(newVector));
+        dropdown.ClearOptions();
+        dropdown.AddOptions(m_DropOptions);
+        positions.Add(newVector);
+        // positions.Add(newVector); //using list function to add this new vector 
+        // dropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData(positions.Count.ToString() + ": " + Vector3_to_String(newVector))); //add the option to the dropdown menu
+        // dropdown.value = positions.Count - 1;//set the dropdown value to change the dropdown shown value
         dropdown.RefreshShownValue(); //Dropdown refresh shown value
         DuplicateTargets.Add(CreateTargetSphere(newVector, ShowAllPointsToggle.isOn)); //Add a duplicate target to be shown
+
+        string jointAngle = joint.GetComponent<UnityEngine.UI.InputField>().text;
+        jointAngles.Add(jointAngle);
+
     }
     ///<summary>
     ///Deletes point currently selected on the dropdown menu
@@ -121,17 +136,28 @@ public class Full_Buttons : MonoBehaviour
     public void Delete_Point()
     {
         //first check to see if positions have a point to be deleted
-        if (positions.Count >= 1)
+        if (positions.Count > 1)
         {
             //remove the specified value
             positions.RemoveRange(dropdown.value, 1);
             dropdown.options.RemoveRange(dropdown.value, 1);
+            m_DropOptions.RemoveRange(dropdown.value, 1);
             //refresh 
             RefreshDropdownNumbering();
             dropdown.RefreshShownValue();
             //render specified target off
             RenderTarget(DuplicateTargets[dropdown.value], false);
             DuplicateTargets.RemoveRange(dropdown.value, 1);
+
+            jointAngles.RemoveRange(dropdown.value, 1);
+
+        }
+        else if (positions.Count == 1)
+        {
+            dropdown.ClearOptions();
+            dropdown.RefreshShownValue();
+            m_DropOptions = new List<string>();
+            jointAngles = new List<string>();
 
         }
         else
@@ -146,41 +172,82 @@ public class Full_Buttons : MonoBehaviour
     public void CoordXEdit()
     {
         //get value of the edit field
-        float currValue = float.Parse(GameObject.Find("CoordX").GetComponent<UnityEngine.UI.InputField>().text);
+        string x = GameObject.Find("CoordX").GetComponent<UnityEngine.UI.InputField>().text;
+
+        if (x.Contains("x:"))
+        {
+            x = x.Remove(0, 2);
+        }
+
+
+        if (float.TryParse(x, out float n))
+        {
+
+            //get value of the edit field
+            float currValue = float.Parse(x);
+            //create new vector with the new X value
+            Vector3 newVector = new Vector3(currValue, target.transform.position.y, target.transform.position.z);
+            target.transform.position = newVector;
+        }
+
         //create new vector with the new X value
-        Vector3 newVector = new Vector3(currValue, positions[dropdown.value].y, positions[dropdown.value].z);
-        //update interface to include the new vector
-        dropdown.options[dropdown.value].text = (dropdown.value + 1).ToString() + ": " + Vector3_to_String(newVector);
-        positions[dropdown.value] = newVector;
-        target.transform.position = newVector;
+        // Vector3 newVector = new Vector3(currValue, positions[dropdown.value].y, positions[dropdown.value].z);
+        // //update interface to include the new vector
+        // dropdown.options[dropdown.value].text = (dropdown.value + 1).ToString() + ": " + Vector3_to_String(newVector);
+        // positions[dropdown.value] = newVector;
+        // target.transform.position = newVector;
     }
     ///<summary>
     ///Called when the Y coordinate edit field value if end edited, edits the value in the positions array and dropdown menu
     ///</summary>
     public void CoordYEdit()
     {
-        //get value of the edit field
-        float currValue = float.Parse(GameObject.Find("CoordY").GetComponent<UnityEngine.UI.InputField>().text);
-        //create new vector with the new X value
-        Vector3 newVector = new Vector3(positions[dropdown.value].x, currValue, positions[dropdown.value].z);
-        //update interface to include the new vector
-        dropdown.options[dropdown.value].text = (dropdown.value + 1).ToString() + ": " + Vector3_to_String(newVector);
-        positions[dropdown.value] = newVector;
-        target.transform.position = newVector;
+        string y = GameObject.Find("CoordY").GetComponent<UnityEngine.UI.InputField>().text;
+
+        if (y.Contains("y:"))
+        {
+            y = y.Remove(0, 2);
+        }
+
+
+        if (float.TryParse(y, out float n))
+        {
+
+            //get value of the edit field
+            float currValue = float.Parse(y);
+            //create new vector with the new X value
+            Vector3 newVector = new Vector3(target.transform.position.x, currValue, target.transform.position.z);
+            target.transform.position = newVector;
+        }
     }
     ///<summary>
     ///Called when the Z coordinate edit field value if end edited, edits the value in the positions array and dropdown menu
     ///</summary>
     public void CoordZEdit()
     {
-        //get value of the edit field
-        float currValue = float.Parse(GameObject.Find("CoordZ").GetComponent<UnityEngine.UI.InputField>().text);
-        //create new vector with the new X value
-        Vector3 newVector = new Vector3(positions[dropdown.value].x, positions[dropdown.value].y, currValue);
-        //update interface to include the new vector
-        dropdown.options[dropdown.value].text = (dropdown.value + 1).ToString() + ": " + Vector3_to_String(newVector);
-        positions[dropdown.value] = newVector;
-        target.transform.position = newVector;
+        string z = GameObject.Find("CoordZ").GetComponent<UnityEngine.UI.InputField>().text;
+        if (z.Contains("z:"))
+        {
+            z = z.Remove(0, 2);
+        }
+
+        if (float.TryParse(z, out float n))
+        {
+            //get value of the edit field
+            float currValue = float.Parse(z);
+            //create new vector with the new Z value
+            Vector3 newVector = new Vector3(target.transform.position.x, target.transform.position.y, currValue);
+
+            target.transform.position = newVector;
+        }
+        // //get value of the edit field
+        // float currValue = float.Parse(GameObject.Find("CoordZ").GetComponent<UnityEngine.UI.InputField>().text);
+        // //create new vector with the new X value
+        // Vector3 newVector = new Vector3(positions[dropdown.value].x, positions[dropdown.value].y, currValue);
+        // //update interface to include the new vector
+        // dropdown.options[dropdown.value].text = (dropdown.value + 1).ToString() + ": " + Vector3_to_String(newVector);
+        // positions[dropdown.value] = newVector;
+        // target.transform.position = newVector;
     }
     ///<summary>
     ///Called when the dropdown menu value is changed: changes the x,y,and z edit fields and changes the target positions
@@ -273,7 +340,7 @@ public class Full_Buttons : MonoBehaviour
     {
         //create a path string that starts at the data path and starts with save.txt
         string[] path = StandaloneFileBrowser.OpenFilePanel("", Application.dataPath, "txt", false);
-        
+
         //read file into an array of strings with each entry being a different line
         string[] strings_vector = File.ReadAllLines(path[0]);
         //reset interface
@@ -311,39 +378,37 @@ public class Full_Buttons : MonoBehaviour
     ///</summary>
     public void Save()
     {
+
         //start path as the save.txt in the application's datapath
         string path = Application.dataPath + "/Save.txt";
-        //Check if the file path exists
-        if (!File.Exists(path)) //if it doens't create a new file with path
-        {
-            File.WriteAllText(path, "");
-        }
-        else //if it does find a suitable filename
-        {
-            bool PathFound = false;
-            int counter = 1;
-            while (!PathFound) //cycle through file names in the form save(1).txt,save(2).txt
-            {
-                path = Application.dataPath + "/Save" + "(" + counter.ToString() + ")" + ".txt";
-                if (File.Exists(path))
-                {
-                    continue;
-                }
-                else
-                {
-                    File.WriteAllText(path, "");
-                    PathFound = true;
-                }
-                counter++;
-            }
-        }
-        
+        string jointPath = Application.dataPath + "/Joints.txt";
+        // writer.WriteLine("Test");
+
+        print(path);
+
+        File.WriteAllText(path, "");
+        File.WriteAllText(jointPath, "");
+
+        StreamWriter writer = new StreamWriter(path, true);
+        StreamWriter jointWriter = new StreamWriter(jointPath, true);
+
         for (int i = 0; i < dropdown.options.Count; i++)
         {
-            string content = dropdown.options[i].text + "\n";
-            File.AppendAllText(path, content);
+            string content = dropdown.options[i].text;
+            // File.AppendAllText(path, content);
+            writer.WriteLine(content);
         }
+        writer.Close();
+
+        for (int i = 0; i < jointAngles.Count; i++)
+        {
+            string content = jointAngles[i];
+            jointWriter.WriteLine(content);
+        }
+        jointWriter.Close();
+
     }
+
     ///<summary>
     ///Selects a point and takes it out of the dropdown menu
     ///</summary>
@@ -357,7 +422,7 @@ public class Full_Buttons : MonoBehaviour
             selected_point = positions[dropdown.value];
             selectedDuplicateTarget = DuplicateTargets[dropdown.value];
             // Turn the Duplicate Target sphere off
-            RenderTarget(DuplicateTargets[dropdown.value], false); 
+            RenderTarget(DuplicateTargets[dropdown.value], false);
             dropdown.options.RemoveRange(dropdown.value, 1);
             DuplicateTargets.RemoveRange(dropdown.value, 1);
             RefreshDropdownNumbering();
@@ -381,7 +446,7 @@ public class Full_Buttons : MonoBehaviour
     public void ShowPoints()
     {
         //Render all points if the toggle is On for Showing all Points
-        TargetPointFunctionRender(ShowAllPointsToggle.isOn); 
+        TargetPointFunctionRender(ShowAllPointsToggle.isOn);
     }
 
 
