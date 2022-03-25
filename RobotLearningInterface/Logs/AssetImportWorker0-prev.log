@@ -1,0 +1,173 @@
+Unity Editor version:    2020.3.28f1 (f5400f52e03f)
+Branch:                  2020.3/staging
+Build type:              Release
+Batch mode:              YES
+macOS version:           Version 12.0.1 (Build 21A559)
+Darwin version:          21.1.0
+Architecture:            x86_64
+Running under Rosetta:   YES
+Available memory:        16384 MB
+Using pre-set license
+Pro License: NO
+
+COMMAND LINE ARGUMENTS:
+/Applications/Unity/Hub/Editor/2020.3.28f1/Unity.app/Contents/MacOS/Unity
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+/Users/jenniferwang/Projects/NIST/robot-learning-interface/RobotLearningInterface
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+51128
+Successfully changed project path to: /Users/jenniferwang/Projects/NIST/robot-learning-interface/RobotLearningInterface
+/Users/jenniferwang/Projects/NIST/robot-learning-interface/RobotLearningInterface
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 30.00 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.28f1 (f5400f52e03f)
+[Subsystems] Discovering subsystems at path /Applications/Unity/Hub/Editor/2020.3.28f1/Unity.app/Contents/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /Users/jenniferwang/Projects/NIST/robot-learning-interface/RobotLearningInterface/Assets
+GfxDevice: creating device client; threaded=0
+2022-03-16 23:47:22.239 Unity[10105:453490] (null) preferred device: Apple M1 Pro (high power)
+2022-03-16 23:47:22.239 Unity[10105:453490] Metal devices available: 1
+2022-03-16 23:47:22.239 Unity[10105:453490] 0: Apple M1 Pro (high power)
+2022-03-16 23:47:22.240 Unity[10105:453490] Using device Apple M1 Pro (high power)
+Initializing Metal device caps: Apple M1 Pro
+Initialize mono
+Mono path[0] = '/Applications/Unity/Hub/Editor/2020.3.28f1/Unity.app/Contents/Managed'
+Mono path[1] = '/Applications/Unity/Hub/Editor/2020.3.28f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = '/Applications/Unity/Hub/Editor/2020.3.28f1/Unity.app/Contents/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56105
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: /Applications/Unity/Hub/Editor/2020.3.28f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Registered in 0.001081 seconds.
+Native extension for OSXStandalone target not found
+Refreshing native plugins compatible for Editor in 26.72 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.205 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1205ms)
+		BeginReloadAssembly (93ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (0ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (2ms)
+		EndReloadAssembly (1006ms)
+			LoadAssemblies (91ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (167ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (40ms)
+			SetupLoadedEditorAssemblies (526ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (10ms)
+				SetLoadedEditorAssemblies (1ms)
+				RefreshPlugins (27ms)
+				BeforeProcessingInitializeOnLoad (31ms)
+				ProcessInitializeOnLoadAttributes (341ms)
+				ProcessInitializeOnLoadMethodAttributes (115ms)
+				AfterProcessingInitializeOnLoad (0ms)
+				EditorAssembliesLoaded (1ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (0ms)
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.005352 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for OSXStandalone target not found
+Refreshing native plugins compatible for Editor in 0.35 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.078 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2080ms)
+		BeginReloadAssembly (251ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (32ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (32ms)
+		EndReloadAssembly (1736ms)
+			LoadAssemblies (192ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (330ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (44ms)
+			SetupLoadedEditorAssemblies (924ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (17ms)
+				SetLoadedEditorAssemblies (2ms)
+				RefreshPlugins (0ms)
+				BeforeProcessingInitializeOnLoad (183ms)
+				ProcessInitializeOnLoadAttributes (693ms)
+				ProcessInitializeOnLoadMethodAttributes (27ms)
+				AfterProcessingInitializeOnLoad (1ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (33ms)
+Platform modules already initialized, skipping
+Validating Project structure ... 0.003523 seconds.
+Shader import version has changed; will reimport all shaders...
+Upgrading shader files ...0.003719 seconds.
+Application.AssetDatabase Initial Script Refresh Start
+RefreshInfo: InitialScriptRefreshV2(NoUpdateAssetOptions) scanfilter:  ... 1 filters
+RefreshProfiler: Total: 0.000ms
+Application.AssetDatabase Initial Script Refresh End
+Application.AssetDatabase.Refresh Start
+Application.AssetDatabase.Refresh End
+RefreshInfo: StopAssetImportingV2(ForceSynchronousImport) scanfilter: 
+RefreshProfiler: Total: 0.000ms
+Launching external process: /Applications/Unity/Hub/Editor/2020.3.28f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.02 seconds
+Initializing Unity extensions:
+========================================================================
+Worker process is ready to serve import requests
+Refreshing native plugins compatible for Editor in 0.32 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1130 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 202.9 MB.
+System memory in use after: 202.1 MB.
+
+Unloading 118 unused Assets to reduce memory usage. Loaded Objects now: 1599.
+Total: 2.544542 ms (FindLiveObjects: 0.069291 ms CreateObjectMapping: 0.025167 ms MarkObjects: 2.018583 ms  DeleteObjects: 0.430667 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:framework-osx-AVFoundation: e770b220cccbd017edd2c1fefb359320 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  path: Assets/3D/MODELS_2021/table_B/12x24_BlockFixture2.dxf
+  artifactKey: Guid(768b74b99424f46b8a234afeab4f2187) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/3D/MODELS_2021/table_B/12x24_BlockFixture2.dxf using Guid(768b74b99424f46b8a234afeab4f2187) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c58586d5dc257a262eb43d2209c31e17') in 0.809149 seconds 
+  Import took 0.812917 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000391 seconds.
+  path: Assets/3D/MODELS_2021/table_B/TableB.FBX
+  artifactKey: Guid(2c6822e7f716bef45938b5ba2e663a0e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/3D/MODELS_2021/table_B/TableB.FBX using Guid(2c6822e7f716bef45938b5ba2e663a0e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '73f8291285d45f9bfaa5593aa0bfb50b') in 0.157071 seconds 
+  Import took 0.161063 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.407198 seconds.
+  path: Assets/3D/MODELS_2021/table_B/block.prefab
+  artifactKey: Guid(f97de9c9de0254d398a99885329ea43f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/3D/MODELS_2021/table_B/block.prefab using Guid(f97de9c9de0254d398a99885329ea43f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '381393815879775e1cc4df59eef61fbf') in 0.059310 seconds 
+  Import took 0.063060 seconds .
+
