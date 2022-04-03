@@ -19232,10 +19232,10 @@ MonoBehaviour:
     Axis: {x: 0.000000059604645, y: 0, z: 0.99999994}
   Y:
     Joint: {fileID: 6591729051784438195}
-    Enabled: 0
+    Enabled: 1
     Constrained: 1
-    LowerLimit: 0
-    UpperLimit: 0
+    LowerLimit: -160
+    UpperLimit: 160
     TargetValue: 0
     CurrentValue: 0
     CurrentError: 0
@@ -19244,7 +19244,7 @@ MonoBehaviour:
     Axis: {x: 0, y: 1, z: 0}
   Z:
     Joint: {fileID: 6591729051784438195}
-    Enabled: 1
+    Enabled: 0
     Constrained: 1
     LowerLimit: -160
     UpperLimit: 160
