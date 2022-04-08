@@ -380,8 +380,8 @@ public class Full_Buttons : MonoBehaviour
     {
 
         //start path as the save.txt in the application's datapath
-        string path = Application.dataPath + "/Save.txt";
-        string jointPath = Application.dataPath + "/Joints.txt";
+        string path = Application.dataPath + "/Save.csv";
+        string jointPath = Application.dataPath + "/Joints.csv";
         // writer.WriteLine("Test");
 
         print(path);
@@ -392,17 +392,19 @@ public class Full_Buttons : MonoBehaviour
         StreamWriter writer = new StreamWriter(path, true);
         StreamWriter jointWriter = new StreamWriter(jointPath, true);
 
+        writer.WriteLine(",x,y,z");
         for (int i = 0; i < dropdown.options.Count; i++)
         {
-            string content = dropdown.options[i].text;
+            string content = dropdown.options[i].text.Replace(": ", ",");
             // File.AppendAllText(path, content);
             writer.WriteLine(content);
         }
         writer.Close();
 
+        jointWriter.WriteLine(",1,2,3,4,5,6");
         for (int i = 0; i < jointAngles.Count; i++)
         {
-            string content = jointAngles[i];
+            string content = jointAngles[i].Replace(")", "").Replace(" ", "").Replace("(", i + ",");
             jointWriter.WriteLine(content);
         }
         jointWriter.Close();

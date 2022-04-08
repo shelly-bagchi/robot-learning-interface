@@ -2694,6 +2694,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 653729974}
+  - component: {fileID: 653729975}
   m_Layer: 0
   m_Name: LabTable
   m_TagString: Untagged
@@ -2716,6 +2717,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &653729975
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653729973}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &659618944
 GameObject:
   m_ObjectHideFlags: 0
@@ -7780,8 +7794,8 @@ MonoBehaviour:
     Joint: {fileID: 182192067113106045}
     Enabled: 1
     Constrained: 1
-    LowerLimit: -160
-    UpperLimit: 160
+    LowerLimit: -90
+    UpperLimit: 90
     TargetValue: 0
     CurrentValue: 0
     CurrentError: 0
@@ -19232,10 +19246,10 @@ MonoBehaviour:
     Axis: {x: 0.000000059604645, y: 0, z: 0.99999994}
   Y:
     Joint: {fileID: 6591729051784438195}
-    Enabled: 1
+    Enabled: 0
     Constrained: 1
-    LowerLimit: -160
-    UpperLimit: 160
+    LowerLimit: 0
+    UpperLimit: 0
     TargetValue: 0
     CurrentValue: 0
     CurrentError: 0
@@ -19244,7 +19258,7 @@ MonoBehaviour:
     Axis: {x: 0, y: 1, z: 0}
   Z:
     Joint: {fileID: 6591729051784438195}
-    Enabled: 0
+    Enabled: 1
     Constrained: 1
     LowerLimit: -160
     UpperLimit: 160
