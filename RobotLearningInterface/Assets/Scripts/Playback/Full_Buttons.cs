@@ -450,11 +450,4 @@ public class Full_Buttons : MonoBehaviour
         //Render all points if the toggle is On for Showing all Points
         TargetPointFunctionRender(ShowAllPointsToggle.isOn);
     }
-
-
-
-
-
-
-
 }
