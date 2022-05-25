@@ -22,7 +22,7 @@ public class Clicked : MonoBehaviour
     public void FixedUpdate() // each frame 
     {
         //Increment counter
-        count++; 
+        count++;
         //First check if the button was pressed
         if (isPressed)
         {
@@ -75,9 +75,10 @@ public class Clicked : MonoBehaviour
             print("Not Enough Points");
             return;
         }
-        else{
-        isPressed = true;
-        count = 0;
+        else
+        {
+            isPressed = true;
+            count = 0;
         }
 
 

@@ -41,8 +41,6 @@ namespace BioIK
                 TPX = position.x;
                 TPY = position.y;
                 TPZ = position.z;
-
-                print(position);
             }
         }
 

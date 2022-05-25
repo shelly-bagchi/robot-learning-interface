@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System;
 using SFB;
+using UnityEngine;
 
 public class Full_Buttons : MonoBehaviour
 {
@@ -22,6 +23,19 @@ public class Full_Buttons : MonoBehaviour
     GameObject joint;
     List<string> jointAngles = new List<string>();
 
+    private Boolean to_generate = false;
+
+    private double starting_pos;
+
+    private double ending_pos;
+
+    private int n_steps = 0;
+
+    private const int n_past = 2;
+
+    private double distance;
+    List<string> cachedAngles = new List<string>();
+
     void Start()
     {
         ShowAllPointsToggle = GameObject.Find("ShowAllPointsToggle").GetComponent<UnityEngine.UI.Toggle>();
@@ -31,6 +45,10 @@ public class Full_Buttons : MonoBehaviour
         point_selected = false;
         DuplicateTargets = new List<GameObject>();
         joint = GameObject.Find("JointAngleFB");
+        ending_pos = UnityEngine.Random.Range((float)0, (float)0.8);
+        starting_pos = UnityEngine.Random.Range((float)-0.7, (float)0);
+        distance = (ending_pos - starting_pos) / n_past;
+        n_steps = n_past;
     }
     ///<summary>
     ///Refreshes the numbering on the dropdown menu
@@ -43,12 +61,38 @@ public class Full_Buttons : MonoBehaviour
         }
     }
 
+    // void Update()
+    // {
+    //     if (n_steps > 0 && starting_pos < ending_pos)
+    //     {
+    //         Vector3 newVector = new Vector3((float)starting_pos, target.transform.position.y, target.transform.position.z);
+    //         target.transform.position = newVector;
+    //         starting_pos += distance;
+    //         print(newVector);
+    //         Add_Point();
+    //         // string jointAngle = joint.GetComponent<UnityEngine.UI.InputField>().text;
+    //         // Debug.Log(jointAngle);
+    //         n_steps--;
+    //     }
+    // }
+
+    public void GenerateData()
+    {
+        starting_pos = UnityEngine.Random.Range((float)-0.7, (float)0);
+        ending_pos = UnityEngine.Random.Range((float)0, (float)0.8);
+        n_steps = n_past;
+        print(n_steps);
+        print(starting_pos < ending_pos);
+        distance = (ending_pos - starting_pos) / n_steps;
+    }
+
     ///<summary>
     ///Creates a duplicate target sphere and renders it only if boolean render enables it
     ///</summary>
     private GameObject CreateTargetSphere(Vector3 position, bool render)
     {
         GameObject newobj = Instantiate(GameObject.Find("DuplicateTarget")); //Creating a new gameobject
+        newobj.tag = "duplicate";
         MeshRenderer[] renderers = newobj.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer renderer in renderers) //go through each Mesh Renderer and set the enabled value to the parameter
         {
@@ -102,11 +146,19 @@ public class Full_Buttons : MonoBehaviour
     public string Vector3_to_String(Vector3 val)
     {
         string retval; // create a string
-        //cocatenate x,y,and z strings
+                       //cocatenate x,y,and z strings
         retval = val.x.ToString("F2") + ",";
         retval += val.y.ToString("F2") + ",";
         retval += val.z.ToString("F2");
         return retval; // return string
+    }
+
+    public void Reset(){
+        dropdown.ClearOptions();
+        m_DropOptions = new List<string>();
+        positions = new List<Vector3>();
+        dropdown.RefreshShownValue();
+        jointAngles = new List<string>();
     }
 
     ///<summary>
@@ -115,7 +167,7 @@ public class Full_Buttons : MonoBehaviour
     public void Add_Point()
     {
         Vector3 newVector = target.transform.position; //set a new vector holding the current target position
-        print(newVector);
+                                                       // print(newVector);
         m_DropOptions.Add((dropdown.options.Count + 1).ToString() + ": " + Vector3_to_String(newVector));
         dropdown.ClearOptions();
         dropdown.AddOptions(m_DropOptions);
@@ -126,8 +178,9 @@ public class Full_Buttons : MonoBehaviour
         dropdown.RefreshShownValue(); //Dropdown refresh shown value
         DuplicateTargets.Add(CreateTargetSphere(newVector, ShowAllPointsToggle.isOn)); //Add a duplicate target to be shown
 
-        string jointAngle = joint.GetComponent<UnityEngine.UI.InputField>().text;
-        jointAngles.Add(jointAngle);
+        // string jointAngle = joint.GetComponent<UnityEngine.UI.InputField>().text;
+        // print(jointAngle);
+        // jointAngles.Add(jointAngle);
 
     }
     ///<summary>
@@ -339,10 +392,10 @@ public class Full_Buttons : MonoBehaviour
     public void Load()
     {
         //create a path string that starts at the data path and starts with save.txt
-        string[] path = StandaloneFileBrowser.OpenFilePanel("", Application.dataPath, "txt", false);
+        // string[] path = StandaloneFileBrowser.OpenFilePanel("", Application.dataPath, "", false);
 
-        //read file into an array of strings with each entry being a different line
-        string[] strings_vector = File.ReadAllLines(path[0]);
+        // read file into an array of strings with each entry being a different line
+        string[] strings_vector = File.ReadAllLines("../RobotLearningInterface/Assets/Save.csv");
         //reset interface
         DuplicateTargets.Clear();
         dropdown.ClearOptions();
@@ -351,23 +404,26 @@ public class Full_Buttons : MonoBehaviour
         GameObject.Find("CoordY").GetComponent<UnityEngine.UI.InputField>().text = "";
         GameObject.Find("CoordZ").GetComponent<UnityEngine.UI.InputField>().text = "";
         //For each string in the string array
-        for (int i = 0; i < strings_vector.GetLength(0); i++)
+        for (int i = 1; i < strings_vector.GetLength(0); i++)
         {
             //get the vector split from the numbering
-            Vector3 newVector;
-            string[] newString = strings_vector[i].Split(':');
+            string[] newString = strings_vector[i].Split(',');
             //check if there is a numbering or not
-            if (newString.Length == 1)
-            {
-                newVector = String_to_Vector3(strings_vector[i]);
-            }
-            else
-            {
-                newVector = String_to_Vector3(newString[1]);
-            }
+            // if (newString.Length == 1)
+            // {
+            //     newVector = String_to_Vector3(strings_vector[i]);
+            // }
+            // else
+            // {
+            //     newVector = String_to_Vector3(newString[1]);
+            // }
+            float x = float.Parse(newString[1]);
+            float y = float.Parse(newString[2]);
+            float z = float.Parse(newString[3]);
+            Vector3 newVector = new Vector3(x, y, z);
             //add point to the interface
-            positions.Add(new Vector3(newVector.x, newVector.y, newVector.z));
-            dropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData((i + 1).ToString() + ": " + Vector3_to_String(newVector)));
+            positions.Add(newVector);
+            dropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData((i).ToString() + ": " + Vector3_to_String(newVector)));
             DuplicateTargets.Add(CreateTargetSphere(newVector, ShowAllPointsToggle.isOn));
         }
         //refresh dropdown menu
@@ -393,6 +449,9 @@ public class Full_Buttons : MonoBehaviour
         StreamWriter jointWriter = new StreamWriter(jointPath, true);
 
         writer.WriteLine(",x,y,z");
+
+        print(dropdown.options);
+
         for (int i = 0; i < dropdown.options.Count; i++)
         {
             string content = dropdown.options[i].text.Replace(": ", ",");
@@ -404,7 +463,7 @@ public class Full_Buttons : MonoBehaviour
         jointWriter.WriteLine(",1,2,3,4,5,6");
         for (int i = 0; i < jointAngles.Count; i++)
         {
-            string content = jointAngles[i].Replace(")", "").Replace(" ", "").Replace("(", i + ",");
+            string content = jointAngles[i].Replace(")", "").Replace(" ", "").Replace("(", (i + 1) + ",");
             jointWriter.WriteLine(content);
         }
         jointWriter.Close();

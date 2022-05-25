@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class reset : MonoBehaviour {
+public class reset : MonoBehaviour
+{
     private Button thisButton;
 
     public GameObject touchControl_f, touchControl_d;
@@ -13,18 +14,20 @@ public class reset : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         thisButton = this.GetComponent<Button>();
         thisButton.onClick.AddListener(TaskOnClick);
 
         startPos_f = touchControl_f.transform.position;
         startPos_d = touchControl_d.transform.position;
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     void TaskOnClick()
     {
@@ -41,14 +44,21 @@ public class reset : MonoBehaviour {
 
         touchControl_f.transform.position = startPos_f;
         touchControl_d.transform.position = startPos_d;
-        
+
         GameObject.Find("Dropdown").GetComponent<UnityEngine.UI.Dropdown>().ClearOptions();
         GameObject.Find("Target").GetComponent<Mouse_drag>().positions.Clear();
         GameObject.Find("CoordX").GetComponent<UnityEngine.UI.InputField>().text = "";
         GameObject.Find("CoordY").GetComponent<UnityEngine.UI.InputField>().text = "";
         GameObject.Find("CoordZ").GetComponent<UnityEngine.UI.InputField>().text = "";
-        GameObject.Find("Dropdown").GetComponent<Full_Buttons>().DuplicateTargets.Clear();
-        GameObject.Find("Dropdown").GetComponent<Full_Buttons>().selected_point = new Vector3();
-        GameObject.Find("Dropdown").GetComponent<Full_Buttons>().point_selected = false;
+
+        //TODO: delete all the duplicate targets
+        // GameObject.Find("Dropdown").GetComponent<Full_Buttons>().DuplicateTargets.Clear();
+        // GameObject.Find("Dropdown").GetComponent<Full_Buttons>().selected_point = new Vector3();
+        // GameObject.Find("Dropdown").GetComponent<Full_Buttons>().point_selected = false;
+        // GameObject.Find("Dropdown").GetComponent<UnityEngine.UI.Dropdown>().ClearOptions();
+        
+        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("duplicate")){
+            Destroy(obj);
+        }
     }
 }
