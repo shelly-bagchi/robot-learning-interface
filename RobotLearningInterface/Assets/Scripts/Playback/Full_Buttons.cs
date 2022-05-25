@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System;
 using SFB;
-using UnityEngine;
 
 public class Full_Buttons : MonoBehaviour
 {
@@ -17,24 +16,16 @@ public class Full_Buttons : MonoBehaviour
     public GameObject selectedDuplicateTarget;
     public List<GameObject> DuplicateTargets;
     public UnityEngine.UI.Toggle ShowAllPointsToggle;
-
-    List<string> m_DropOptions = new List<string>();
-
-    GameObject joint;
-    List<string> jointAngles = new List<string>();
-
-    private Boolean to_generate = false;
-
-    private double starting_pos;
-
-    private double ending_pos;
-
-    private int n_steps = 0;
-
-    private const int n_past = 2;
-
-    private double distance;
-    List<string> cachedAngles = new List<string>();
+    List<string> m_DropOptions = new List<string>(); // temp list of drop options (for editing the dropdown menu)
+    GameObject joint; //refers to the JointAngleFB input field
+    List<string> jointAngles = new List<string>(); //keeps track of the robotic joint angles at each position
+    private double start_pos; // start position where the target populates
+    private double end_pos; // end position where the target populates
+    private int n_steps; // temp number of steps from start to end
+    private const int n_past = 5; // fixed number of steps from start to end
+    private int to_generate = 10; // fixed number of iterations to run data generation
+    private int generating; // temp number of iterations to run data generation
+    private double distance; // distance per step
 
     void Start()
     {
@@ -45,11 +36,14 @@ public class Full_Buttons : MonoBehaviour
         point_selected = false;
         DuplicateTargets = new List<GameObject>();
         joint = GameObject.Find("JointAngleFB");
-        ending_pos = UnityEngine.Random.Range((float)0, (float)0.8);
-        starting_pos = UnityEngine.Random.Range((float)-0.7, (float)0);
-        distance = (ending_pos - starting_pos) / n_past;
+
+        end_pos = UnityEngine.Random.Range((float)0, (float)0.8);
+        start_pos = UnityEngine.Random.Range((float)-0.7, (float)0);
+        distance = (end_pos - start_pos) / n_past;
         n_steps = n_past;
+        generating = to_generate;
     }
+
     ///<summary>
     ///Refreshes the numbering on the dropdown menu
     ///</summary>
@@ -61,29 +55,53 @@ public class Full_Buttons : MonoBehaviour
         }
     }
 
-    // void Update()
-    // {
-    //     if (n_steps > 0 && starting_pos < ending_pos)
-    //     {
-    //         Vector3 newVector = new Vector3((float)starting_pos, target.transform.position.y, target.transform.position.z);
-    //         target.transform.position = newVector;
-    //         starting_pos += distance;
-    //         print(newVector);
-    //         Add_Point();
-    //         // string jointAngle = joint.GetComponent<UnityEngine.UI.InputField>().text;
-    //         // Debug.Log(jointAngle);
-    //         n_steps--;
-    //     }
-    // }
+    private int frames = 0; // frames to pass before updating
 
+    void Update()
+    {
+        if (generating != to_generate){
+            frames++;
+            if (frames % 400 == 0 && n_steps != n_past && start_pos < end_pos) {
+                StartCoroutine(AutoMove());
+            }
+
+            if (frames % 400 == 0 && n_steps == n_past){
+                Save();
+                generating += 1;
+                //reset variables for generating data
+                start_pos = UnityEngine.Random.Range((float)-0.7, (float)0);
+                end_pos = UnityEngine.Random.Range((float)0, (float)0.8);
+                distance = (end_pos - start_pos) / n_past;
+                n_steps = 0;
+            }
+        }
+    }
+
+    ///<summary>
+    ///Moves the target automatically to generate data
+    ///</summary>
+    IEnumerator AutoMove(){
+         Vector3 newVector = new Vector3((float) start_pos, target.transform.position.y, target.transform.position.z);
+         target.transform.position = newVector;
+         start_pos += distance;
+         Add_Point();
+         yield return new WaitForSeconds(2); // waits 2 second before recording the joint angle
+         string jointAngle = joint.GetComponent<UnityEngine.UI.InputField>().text;
+         jointAngles.Add(jointAngle);
+         Debug.Log(jointAngle);
+         n_steps++;
+    }
+
+    ///<summary>
+    ///Set up variables to generate data (gets called when generate data button is clicked)
+    ///</summary>
     public void GenerateData()
     {
-        starting_pos = UnityEngine.Random.Range((float)-0.7, (float)0);
-        ending_pos = UnityEngine.Random.Range((float)0, (float)0.8);
-        n_steps = n_past;
-        print(n_steps);
-        print(starting_pos < ending_pos);
-        distance = (ending_pos - starting_pos) / n_steps;
+        start_pos = UnityEngine.Random.Range((float)-0.7, (float)0);
+        end_pos = UnityEngine.Random.Range((float)0, (float)0.8);
+        n_steps = 0;
+        generating = 0;
+        distance = (end_pos - start_pos) / n_past;
     }
 
     ///<summary>
@@ -125,6 +143,7 @@ public class Full_Buttons : MonoBehaviour
             renderer.enabled = on; //set the render enabled value to parameter boolean on
         }
     }
+
     ///<summary>
     ///turns a string in the form: "x,y,z" into a Vector3 and returns the vector;
     ///</summary>
@@ -140,6 +159,7 @@ public class Full_Buttons : MonoBehaviour
 
         return retval; // return vector
     }
+
     ///<summary>
     ///takes in a Vector3 and returns a string in the form: "x,y,z"
     ///</summary>
@@ -153,6 +173,9 @@ public class Full_Buttons : MonoBehaviour
         return retval; // return string
     }
 
+    ///<summary>
+    ///resets variables to initial state;
+    ///</summary>
     public void Reset(){
         dropdown.ClearOptions();
         m_DropOptions = new List<string>();
@@ -167,22 +190,19 @@ public class Full_Buttons : MonoBehaviour
     public void Add_Point()
     {
         Vector3 newVector = target.transform.position; //set a new vector holding the current target position
-                                                       // print(newVector);
-        m_DropOptions.Add((dropdown.options.Count + 1).ToString() + ": " + Vector3_to_String(newVector));
-        dropdown.ClearOptions();
-        dropdown.AddOptions(m_DropOptions);
-        positions.Add(newVector);
-        // positions.Add(newVector); //using list function to add this new vector 
-        // dropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData(positions.Count.ToString() + ": " + Vector3_to_String(newVector))); //add the option to the dropdown menu
-        // dropdown.value = positions.Count - 1;//set the dropdown value to change the dropdown shown value
+        m_DropOptions.Add((dropdown.options.Count + 1).ToString() + ": " + Vector3_to_String(newVector)); // add the new vector to m_DropOptions
+        dropdown.ClearOptions(); // clear the current dropdown menu
+        dropdown.AddOptions(m_DropOptions); //add the new list of options from m_DropOptions to dropdown menu
+        positions.Add(newVector); // add the location of the target to list of vectors
         dropdown.RefreshShownValue(); //Dropdown refresh shown value
         DuplicateTargets.Add(CreateTargetSphere(newVector, ShowAllPointsToggle.isOn)); //Add a duplicate target to be shown
 
-        // string jointAngle = joint.GetComponent<UnityEngine.UI.InputField>().text;
-        // print(jointAngle);
-        // jointAngles.Add(jointAngle);
-
+        if (generating == to_generate){
+            string jointAngle = joint.GetComponent<UnityEngine.UI.InputField>().text;
+            jointAngles.Add(jointAngle); // add robotic joint angles to the list of joint angles
+        }
     }
+
     ///<summary>
     ///Deletes point currently selected on the dropdown menu
     ///</summary>
@@ -205,7 +225,7 @@ public class Full_Buttons : MonoBehaviour
             jointAngles.RemoveRange(dropdown.value, 1);
 
         }
-        else if (positions.Count == 1)
+        else if (positions.Count == 1) // edge case if there's only one point left
         {
             dropdown.ClearOptions();
             dropdown.RefreshShownValue();
@@ -219,6 +239,7 @@ public class Full_Buttons : MonoBehaviour
             print("No points to delete");
         }
     }
+
     ///<summary>
     ///Called when the X coordinate edit field value if end edited, edits the value in the positions array and dropdown menu
     ///</summary>
@@ -227,45 +248,36 @@ public class Full_Buttons : MonoBehaviour
         //get value of the edit field
         string x = GameObject.Find("CoordX").GetComponent<UnityEngine.UI.InputField>().text;
 
-        if (x.Contains("x:"))
+        if (x.Contains("x:")) // if the input field contains placeholder text
         {
             x = x.Remove(0, 2);
         }
 
-
         if (float.TryParse(x, out float n))
         {
-
             //get value of the edit field
             float currValue = float.Parse(x);
             //create new vector with the new X value
             Vector3 newVector = new Vector3(currValue, target.transform.position.y, target.transform.position.z);
             target.transform.position = newVector;
         }
-
-        //create new vector with the new X value
-        // Vector3 newVector = new Vector3(currValue, positions[dropdown.value].y, positions[dropdown.value].z);
-        // //update interface to include the new vector
-        // dropdown.options[dropdown.value].text = (dropdown.value + 1).ToString() + ": " + Vector3_to_String(newVector);
-        // positions[dropdown.value] = newVector;
-        // target.transform.position = newVector;
     }
+
     ///<summary>
     ///Called when the Y coordinate edit field value if end edited, edits the value in the positions array and dropdown menu
     ///</summary>
     public void CoordYEdit()
     {
+        //get value of the edit field
         string y = GameObject.Find("CoordY").GetComponent<UnityEngine.UI.InputField>().text;
 
-        if (y.Contains("y:"))
+        if (y.Contains("y:")) // if the input field contains placeholder text
         {
             y = y.Remove(0, 2);
         }
 
-
         if (float.TryParse(y, out float n))
         {
-
             //get value of the edit field
             float currValue = float.Parse(y);
             //create new vector with the new X value
@@ -273,13 +285,16 @@ public class Full_Buttons : MonoBehaviour
             target.transform.position = newVector;
         }
     }
+
     ///<summary>
     ///Called when the Z coordinate edit field value if end edited, edits the value in the positions array and dropdown menu
     ///</summary>
     public void CoordZEdit()
     {
+        //get value of the edit field
         string z = GameObject.Find("CoordZ").GetComponent<UnityEngine.UI.InputField>().text;
-        if (z.Contains("z:"))
+
+        if (z.Contains("z:")) // if the input field contains placeholder text
         {
             z = z.Remove(0, 2);
         }
@@ -293,15 +308,8 @@ public class Full_Buttons : MonoBehaviour
 
             target.transform.position = newVector;
         }
-        // //get value of the edit field
-        // float currValue = float.Parse(GameObject.Find("CoordZ").GetComponent<UnityEngine.UI.InputField>().text);
-        // //create new vector with the new X value
-        // Vector3 newVector = new Vector3(positions[dropdown.value].x, positions[dropdown.value].y, currValue);
-        // //update interface to include the new vector
-        // dropdown.options[dropdown.value].text = (dropdown.value + 1).ToString() + ": " + Vector3_to_String(newVector);
-        // positions[dropdown.value] = newVector;
-        // target.transform.position = newVector;
     }
+
     ///<summary>
     ///Called when the dropdown menu value is changed: changes the x,y,and z edit fields and changes the target positions
     ///</summary>
@@ -316,6 +324,7 @@ public class Full_Buttons : MonoBehaviour
         GameObject.Find("CoordY").GetComponent<UnityEngine.UI.InputField>().text = pos.y.ToString("F2");
         GameObject.Find("CoordZ").GetComponent<UnityEngine.UI.InputField>().text = pos.z.ToString("F2");
     }
+
     ///<summary>
     ///Inserts the target sphere position as a point prior to the point selected on the dropdown menu
     ///</summary>
@@ -350,6 +359,7 @@ public class Full_Buttons : MonoBehaviour
         point_selected = false;
 
     }
+
     ///<summary>
     ///Inserts the target sphere position as a point after to the point selected on the dropdown menu
     ///</summary>
@@ -408,19 +418,13 @@ public class Full_Buttons : MonoBehaviour
         {
             //get the vector split from the numbering
             string[] newString = strings_vector[i].Split(',');
-            //check if there is a numbering or not
-            // if (newString.Length == 1)
-            // {
-            //     newVector = String_to_Vector3(strings_vector[i]);
-            // }
-            // else
-            // {
-            //     newVector = String_to_Vector3(newString[1]);
-            // }
+
+            //parse line into coordinates
             float x = float.Parse(newString[1]);
             float y = float.Parse(newString[2]);
             float z = float.Parse(newString[3]);
             Vector3 newVector = new Vector3(x, y, z);
+
             //add point to the interface
             positions.Add(newVector);
             dropdown.options.Add(new UnityEngine.UI.Dropdown.OptionData((i).ToString() + ": " + Vector3_to_String(newVector)));
@@ -429,18 +433,15 @@ public class Full_Buttons : MonoBehaviour
         //refresh dropdown menu
         dropdown.RefreshShownValue();
     }
+
     ///<summary>
     ///Saves a .txt file to application.dataPath with a vector in the form of "x,y,z" on each line 
     ///</summary>
     public void Save()
     {
-
-        //start path as the save.txt in the application's datapath
+        //start path as the save.csv and joints.csv in the application's datapath (will appear under assets)
         string path = Application.dataPath + "/Save.csv";
         string jointPath = Application.dataPath + "/Joints.csv";
-        // writer.WriteLine("Test");
-
-        print(path);
 
         File.WriteAllText(path, "");
         File.WriteAllText(jointPath, "");
@@ -448,21 +449,22 @@ public class Full_Buttons : MonoBehaviour
         StreamWriter writer = new StreamWriter(path, true);
         StreamWriter jointWriter = new StreamWriter(jointPath, true);
 
-        writer.WriteLine(",x,y,z");
-
-        print(dropdown.options);
+        writer.WriteLine(",x,y,z"); // write header
 
         for (int i = 0; i < dropdown.options.Count; i++)
         {
+            // write each postion as a line to the csv
             string content = dropdown.options[i].text.Replace(": ", ",");
             // File.AppendAllText(path, content);
             writer.WriteLine(content);
         }
         writer.Close();
 
-        jointWriter.WriteLine(",1,2,3,4,5,6");
+        jointWriter.WriteLine(",1,2,3,4,5,6"); //write header
+
         for (int i = 0; i < jointAngles.Count; i++)
         {
+            // write each joint angle as a line to the csv
             string content = jointAngles[i].Replace(")", "").Replace(" ", "").Replace("(", (i + 1) + ",");
             jointWriter.WriteLine(content);
         }

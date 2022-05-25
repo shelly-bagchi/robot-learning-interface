@@ -38,13 +38,16 @@ public class DisplayJoints : MonoBehaviour
         j5val = 0.0 - j5.Y.CurrentValue;
         j6val = j6.X.CurrentValue;
 
-        //Debug.Log(j1val.ToString() + ',' + j2val.ToString() + ',' + j3val.ToString() + ',' +
+        // Debug.Log(j1val.ToString() + ',' + j2val.ToString() + ',' + j3val.ToString() + ',' +
         //    j4val.ToString() + ',' + j5val.ToString() + ',' + j6val.ToString());
 
     }
 
     // Use to update UI elements
     void LateUpdate () {
+
+        Debug.Log(string.Format("({0:0.0}, {1:0.0}, {2:0.0}, {3:0.0}, {4:0.0}, {5:0.0})",
+                j1val, j2val, j3val, j4val, j5val, j6val));
 
         outputText.text = string.Format("({0:0.0}, {1:0.0}, {2:0.0}, {3:0.0}, {4:0.0}, {5:0.0})",
                 j1val, j2val, j3val, j4val, j5val, j6val);
