@@ -4687,7 +4687,6 @@ GameObject:
   - component: {fileID: 1115334803}
   - component: {fileID: 1115334804}
   - component: {fileID: 1115334806}
-  - component: {fileID: 1115334805}
   m_Layer: 5
   m_Name: Waypoint recording interface
   m_TagString: Untagged
@@ -4733,26 +4732,6 @@ RectTransform:
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1115334804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1115334802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd51b14e2e4043a4999814474f925f47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropdown: {fileID: 0}
-  positions: []
-  target: {fileID: 0}
-  point_selected: 0
-  selected_point: {x: 0, y: 0, z: 0}
-  selectedDuplicateTarget: {fileID: 0}
-  DuplicateTargets: []
-  ShowAllPointsToggle: {fileID: 0}
---- !u!114 &1115334805
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13768,7 +13747,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1885847371195036070}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1115334804}
+        m_TargetAssemblyTypeName: Full_Buttons, Assembly-CSharp
+        m_MethodName: Reset
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!33 &1885847371381213131
 MeshFilter:
   m_ObjectHideFlags: 0
