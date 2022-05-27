@@ -29,7 +29,7 @@ There are two mdps created to simulate the robot learning environment.
 
 One is a simplified version, in which the robot is assumed to be holding the block already and the task is to navigate to the goal location. You can specify the goal coordinates as a parameter to the mdp.
 
-The other is an object-oriented version. The robot is assigned a task to pick up a block of a certain color and move it to a specific grid cell. You can create a task object specifying the block and the location to move it to in the parameters. See an example in _simple_rl/object_oriented/main.py_.
+The other is an object-oriented version. The robot is assigned a task to pick up a block of a certain color and move it to a specific grid cell. You can create a task object specifying the block and the location to move it to in the parameters. See an example in `simple_rl/object_oriented/main.py`.
 
 The general instructions for experimenting with the simple_rl library are:
 
@@ -46,7 +46,7 @@ simple_rl requires numpy and matplotlib. You can install numpy following the gui
 
 ### Running simple_rl:
 
-1. cd into the _simple_rl/object_oriented_ or _simple_rl/simplified_ folder
+1. cd into the `simple_rl/object_oriented` or `simple_rl/simplified` folder
 2. run `python main.py` in terminal
 
 ### Next Steps:
