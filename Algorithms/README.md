@@ -46,7 +46,7 @@ simple_rl requires numpy and matplotlib. You can install numpy following the gui
 
 ### Running simple_rl:
 
-1. cd into the _object_oriented_ or _simplified_ folder
+1. cd into the _simple_rl/object_oriented_ or _simple_rl/simplified_ folder
 2. run `python main.py` in terminal
 
 ### Next Steps:
