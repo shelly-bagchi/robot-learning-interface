@@ -43,3 +43,5 @@ sysinfo.txt
 *.7z
 RobotInterface/Temp/*
 RobotInterface/Library/Artifacts/*
+Algorithms/simple_rl/object_oriented/results/*
+Algorithms/simple_rl/simplified/results/*
